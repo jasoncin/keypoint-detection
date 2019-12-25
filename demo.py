@@ -98,10 +98,10 @@ def infer_fast(net, img, net_input_height_size, stride, upsample_ratio, cpu,
     heatmaps = cv2.resize(heatmaps, (0, 0), fx=upsample_ratio, fy=upsample_ratio, interpolation=cv2.INTER_CUBIC)
     
     # print(len(heatmaps))
-    for i in range(8):
-        heatmap = heatmaps[:, :, i]
-        cv2.imshow("Heat map", heatmap)
-        cv2.waitKey(0)
+    # for i in range(8):
+    #     heatmap = heatmaps[:, :, i]
+    #     cv2.imshow("Heat map", heatmap)
+    #     cv2.waitKey(0)
     
     stage2_pafs = stages_output[-1]
     pafs = np.transpose(stage2_pafs.squeeze().cpu().data.numpy(), (1, 2, 0))
@@ -129,7 +129,7 @@ def run_demo(net, image_provider, height_size, cpu, track_ids):
     for img in image_provider:
         start_time = time.time()
         orig_img = img.copy()
-        scale = 128 / orig_img.shape[0]
+        scale = 368 / orig_img.shape[0]
         orig_img = cv2.resize(img, (0, 0), fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
 
         img = orig_img.copy()
@@ -151,15 +151,15 @@ def run_demo(net, image_provider, height_size, cpu, track_ids):
         print("All keypoints", all_keypoints)
         print("Total kps", len(all_keypoints))
         try:
-            # cv2.line(img, (int(all_keypoints[0][0]), int(all_keypoints[0][1])), (int(all_keypoints[1][0]), int(all_keypoints[1][1])), Pose.color, 2)
-            # cv2.line(img, (int(all_keypoints[1][0]), int(all_keypoints[1][1])), (int(all_keypoints[2][0]), int(all_keypoints[2][1])), Pose.color, 2)
-            # cv2.line(img, (int(all_keypoints[2][0]), int(all_keypoints[2][1])), (int(all_keypoints[3][0]), int(all_keypoints[3][1])), Pose.color, 2)
-            # cv2.line(img, (int(all_keypoints[3][0]), int(all_keypoints[3][1])), (int(all_keypoints[0][0]), int(all_keypoints[0][1])), Pose.color, 2)
+            cv2.line(img, (int(all_keypoints[0][0]), int(all_keypoints[0][1])), (int(all_keypoints[1][0]), int(all_keypoints[1][1])), Pose.color, 2)
+            cv2.line(img, (int(all_keypoints[1][0]), int(all_keypoints[1][1])), (int(all_keypoints[2][0]), int(all_keypoints[2][1])), Pose.color, 2)
+            cv2.line(img, (int(all_keypoints[2][0]), int(all_keypoints[2][1])), (int(all_keypoints[3][0]), int(all_keypoints[3][1])), Pose.color, 2)
+            cv2.line(img, (int(all_keypoints[3][0]), int(all_keypoints[3][1])), (int(all_keypoints[0][0]), int(all_keypoints[0][1])), Pose.color, 2)
 
-            for i, kp in enumerate(all_keypoints):
-                if i + 1 == len(all_keypoints):
-                    break
-                cv2.line(img, (int(kp[i][0]), int(all_keypoints[i][1])), (int(all_keypoints[i+1][0]), int(all_keypoints[i+1][1])), Pose.color, 2)
+            # for i, kp in enumerate(all_keypoints):
+            #     if i + 1 == len(all_keypoints):
+            #         break
+            #     cv2.line(img, (int(kp[i][0]), int(all_keypoints[i][1])), (int(all_keypoints[i+1][0]), int(all_keypoints[i+1][1])), Pose.color, 2)
             cv2.imwrite("visualize/Img_{}.png".format(str(random.randint(0, 1000))), img)
             continue
         except Exception:
@@ -197,8 +197,8 @@ if __name__ == '__main__':
         description='''Lightweight human pose estimation python demo.
                        This is just for quick results preview.
                        Please, consider c++ demo for the best performance.''')
-    parser.add_argument('--checkpoint-path', type=str, default='weights\checkpoint_iter_17600.pth', help='path to the checkpoint')
-    parser.add_argument('--height-size', type=int, default=128, help='network input layer height size')
+    parser.add_argument('--checkpoint-path', type=str, default='weights\checkpoint_iter_3200.pth', help='path to the checkpoint')
+    parser.add_argument('--height-size', type=int, default=368, help='network input layer height size')
     parser.add_argument('--video', type=str, default='', help='path to video file or camera id')
     parser.add_argument('--images', nargs='+', default=[r'D:\Coding\DocHomographyGenerator\res\output\train_1\Image_39.png'], help='path to input image(s)')
     parser.add_argument('--cpu', action='store_true', help='run network inference on cpu')
@@ -210,7 +210,7 @@ if __name__ == '__main__':
     list_file = []
     # dir_test = r'D:\\Coding\\DocHomographyGenerator\\res\\output\\train_2\\'
     # dir_test = r"D:\Coding\DocHomographyGenerator\res\output\train_2\\"
-    dir_test = r"D:\Coding\keypoint-detection\data\dewarp_labeled_data\Invoice_Toyota4_CameraData_Training_20191206\images\\"
+    dir_test = r"D:\Coding\keypoint-detection\data\dewarp_labeled_data\Invoice_Toyota4_CameraData_Testing_20190612\images"
     for file in os.listdir(dir_test):
         if file.endswith("JPG") or file.endswith("jpg") or file.endswith("png"):
             list_file.append(os.path.join(dir_test, file))

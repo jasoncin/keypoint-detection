@@ -1,7 +1,7 @@
 import pickle
 
-file1 = r"D:\Coding\lightweight-human-pose-estimation.pytorch\data\dewarp_labeled_data\train_8_corners\images\prepared_train_annotation.pkl"
-file2 = r"D:\Coding\lightweight-human-pose-estimation.pytorch\data\dewarp_labeled_data\Invoice_Toyota4_Dewarp_Training_HSBCdata\images\prepared_train_annotation.pkl"
+file1 = r"D:\Coding\keypoint-detection\data\dewarp_labeled_data\train_368_8_2\images\prepared_train_annotation.pkl"
+file2 = r"D:\Coding\keypoint-detection\data\dewarp_labeled_data\Invoice_Toyota4_Dewarp_Training_HSBCdata\images\prepared_train_annotation.pkl"
 
 with open(file1, 'rb') as f:
     u = pickle._Unpickler(f)
@@ -17,7 +17,7 @@ with open(file1, 'rb') as f:
         _label1.extend(_label2)
         print("Length file +", len(_label1))
 
-    with open(r"D:\Coding\lightweight-human-pose-estimation.pytorch\data\dewarp_labeled_data\train_8_corners\images\prepared_train_annotation.pkl", 'wb') as f:
+    with open(r"D:\Coding\keypoint-detection\data\dewarp_labeled_data\train_368_8\images\prepared_train_annotation.pkl", 'wb') as f:
         pickle.dump(_label1, f)
 
 # w = open("example.txt", 'w')

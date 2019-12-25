@@ -91,7 +91,7 @@ for f in os.listdir(root_dir):
                     all_corners.append(all_points_y[i] + top_pad)
                 
                 print(all_corners)
-                net_input_size = 128
+                net_input_size = 368
                 for i in range(len(all_corners)):
                     all_corners[i] = int( 1.0 * net_input_size / padding_warped_image.shape[0] * all_corners[i])
                 print(">>>>", all_corners)
@@ -108,7 +108,7 @@ for f in os.listdir(root_dir):
                 corners = [[all_corners[0], all_corners[1]], [all_corners[2], all_corners[3]],
                         [all_corners[4], all_corners[5]], [all_corners[6], all_corners[7]]]
 
-                annotation = {"img_paths": "000000502336.jpg", "img_width": 640, "img_height": 431, "num_keypoints": 4,
+                annotation = {"img_paths": "000000502336.jpg", "img_width": 640, "img_height": 431, "num_keypoints": 8,
                             "segmentations": [],
                             "keypoints": [], "processed_other_annotations": []}
                 annotation["img_paths"] = img_name
@@ -142,7 +142,7 @@ for f in os.listdir(root_dir):
                     keypoints.append([corner[0], corner[1], 1])
                 for i in range(MAX_POINT - len(keypoints)):
                     keypoints.append([0, 0, 0])
-                    
+                annotation["num_keypoints"] = MAX_POINT
                 annotation["keypoints"] = keypoints
                 prepared_annotations.append(annotation)
 

@@ -5,9 +5,9 @@ from modules.keypoints import BODY_PARTS_KPT_IDS, BODY_PARTS_PAF_IDS
 
 
 class Pose(object):
-    num_kpts = 8
+    num_kpts = 4
     kpt_names = ['toplef', 'topright',
-                 'botright', 'botlef', 't1', 't2', 't3', 't4']
+                 'botright', 'botlef' ]
     sigmas = np.array([.26, .79, .79, .72, .62, .79, .72, .62, 1.07, .87, .89, 1.07, .87, .89, .25, .25, .35, .35],
                       dtype=np.float32) / 10.0
     vars = (sigmas * 2) ** 2
