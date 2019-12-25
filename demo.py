@@ -210,7 +210,7 @@ if __name__ == '__main__':
     list_file = []
     # dir_test = r'D:\\Coding\\DocHomographyGenerator\\res\\output\\train_2\\'
     # dir_test = r"D:\Coding\DocHomographyGenerator\res\output\train_2\\"
-    dir_test = r"D:\Coding\keypoint-detection\data\dewarp_labeled_data\Invoice_Toyota4_CameraData_Testing_20190612\images"
+    dir_test = r"C:\Users\ADMIN\Downloads\test_data\test_data"
     for file in os.listdir(dir_test):
         if file.endswith("JPG") or file.endswith("jpg") or file.endswith("png"):
             list_file.append(os.path.join(dir_test, file))
