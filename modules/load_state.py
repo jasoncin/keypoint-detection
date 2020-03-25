@@ -25,7 +25,6 @@ def load_from_mobilenet(net, checkpoint):
             k = k.replace('model', 'module.model')
         if k in source_state and source_state[k].size() == target_state[target_key].size():
             new_target_state[target_key] = source_state[k]
-            print('[INFO] Found pre-trained parameters for {}'.format(target_key))
         else:
             new_target_state[target_key] = target_state[target_key]
             print('[WARNING] Not found pre-trained parameters for {}'.format(target_key))

@@ -6,15 +6,20 @@ import pickle
 
 root_dir = "data/dewarp_labeled_data"
 
+prepared_annotations = []
+
 for f in os.listdir(root_dir):
-    if "Testing" in f:
+    if "Invoice" not in f:
         continue
+
+    if "Testing" in f or "Scanned" in f:
+        continue
+
     folder_set = root_dir + "/" + f
     visual_dir = folder_set + "/" + "visualize"
     if not os.path.exists(visual_dir):
         os.mkdir(os.path.join(folder_set, "visualize"))
 
-    prepared_annotations = []
 
     for img_name in os.listdir(folder_set + "/images"):
         if not (img_name.endswith("JPG") or img_name.endswith("jpg") or img_name.endswith("png")):
@@ -64,7 +69,7 @@ for f in os.listdir(root_dir):
                     cv2.line(drawed_img, (int(all_points_x[i]), int(all_points_y[i])), (int(all_points_x[i + 1]), int(all_points_y[i + 1])), (B, G, R), 10)               
                     break
 
-            if len(all_points_x):
+            if len(all_points_x) == 4:
                 more_than_two += 1
 
                 bordersize = 111
@@ -91,7 +96,7 @@ for f in os.listdir(root_dir):
                     all_corners.append(all_points_y[i] + top_pad)
                 
                 print(all_corners)
-                net_input_size = 368
+                net_input_size = 256
                 for i in range(len(all_corners)):
                     all_corners[i] = int( 1.0 * net_input_size / padding_warped_image.shape[0] * all_corners[i])
                 print(">>>>", all_corners)
@@ -136,7 +141,7 @@ for f in os.listdir(root_dir):
                 annotation['scale_provided'] = annotation['bbox'][3] / net_input_size
                 annotation['segmentations'] = [cor for cor in all_corners]
 
-                MAX_POINT = 8
+                MAX_POINT = 4
                 keypoints = []
                 for corner in corners:
                     keypoints.append([corner[0], corner[1], 1])
@@ -146,16 +151,18 @@ for f in os.listdir(root_dir):
                 annotation["keypoints"] = keypoints
                 prepared_annotations.append(annotation)
 
-                if not os.path.exists(folder_set + "/bimages/"):
-                    os.mkdir(folder_set + "/bimages/")
-                cv2.imwrite(folder_set + "/bimages/" + img_name, padding_warped_image)
+                # if not os.path.exists(folder_set + "/bimages/"):
+                #     os.mkdir(folder_set + "/bimages/")
+                folder_out = "D:/Coding/keypoint-detection/data/train_256_4/"
+                cv2.imwrite(folder_out + img_name, padding_warped_image)
+                # cv2.imwrite(folder_set + "/bimages/" + img_name, padding_warped_image)
             try:
                 if drawed_img.shape:
                     cv2.imwrite(visual_dir + "/" + img_name, drawed_img)
             except Exception as e:
                 print("Ex")
-    with open(folder_set + "/images/" + "prepared_train_annotation.pkl", 'wb') as f:
-        pickle.dump(prepared_annotations, f)
+with open(folder_out + "prepared_train_annotation.pkl", 'wb') as f:
+    pickle.dump(prepared_annotations, f)
     
 
             

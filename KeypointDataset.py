@@ -10,8 +10,8 @@ import pycocotools
 
 from torch.utils.data.dataset import Dataset
 
-# BODY_PARTS_KPT_IDS = [[0, 1], [2, 1], [3, 2], [3, 0]]
-BODY_PARTS_KPT_IDS = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 0]]
+BODY_PARTS_KPT_IDS = [[0, 0]]
+#BODY_PARTS_KPT_IDS = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 0]]
 
 class DocumentTrainDataset(Dataset):
     def __init__(self, labels, images_folder, stride, sigma, paf_thickness, transform=None):
@@ -32,11 +32,14 @@ class DocumentTrainDataset(Dataset):
 
     def __getitem__(self, idx):
         label = copy.deepcopy(self._labels[idx])  # label modified in transform
-        
+        # print(label)
+        # print("------------")
         image = cv2.imread(os.path.join(self._images_folder, label['img_paths']), cv2.IMREAD_COLOR)
         mask = np.ones(shape=(label['img_height'], label['img_width']), dtype=np.float32)
+        print(label['img_height'], label['img_width'])
+        print(mask.shape)
         #mask = get_mask(label['segmentations'], mask)
-        # print("Label", label)
+        #print("Label", label)
         # cv2.imshow("Mask", mask)
         # cv2.waitKey(0)
         sample = {
@@ -48,8 +51,19 @@ class DocumentTrainDataset(Dataset):
         if self._transform:
             sample = self._transform(sample)
 
+        # cv2.imshow("Mask", sample["mask"])
+        # cv2.waitKey(0)
+        #
+        # cv2.imshow("image", sample["image"])
+        # cv2.waitKey(0)
+
         mask = cv2.resize(sample['mask'], dsize=None, fx=1 / self._stride, fy=1 / self._stride,
                           interpolation=cv2.INTER_AREA)
+
+        # print("[INFO] Mask resize shape= {}".format(mask.shape))
+        # print("[INFO] Mask resize ratio= {}".format(1 / self._stride))
+
+        #Moi keypoint mot mask tuong ung
         keypoint_maps = self._generate_keypoint_maps(sample)
 
         sample['keypoint_maps'] = keypoint_maps
@@ -57,7 +71,7 @@ class DocumentTrainDataset(Dataset):
         for idx in range(keypoint_mask.shape[0]):
             keypoint_mask[idx] = mask
         sample['keypoint_mask'] = keypoint_mask
-        
+
         # cv2.imshow("Keypoint mask", keypoint_mask)
         # cv2.waitKey(0)
 
@@ -77,8 +91,7 @@ class DocumentTrainDataset(Dataset):
         return len(self._labels)
 
     def _generate_keypoint_maps(self, sample):
-        # Change here
-        n_keypoints = 8
+        n_keypoints = 1
         n_rows, n_cols, _ = sample['image'].shape
         keypoint_maps = np.zeros(shape=(n_keypoints + 1,
                                         n_rows // self._stride, n_cols // self._stride), dtype=np.float32)  # +1 for bg

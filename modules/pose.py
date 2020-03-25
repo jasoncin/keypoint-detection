@@ -5,14 +5,17 @@ from modules.keypoints import BODY_PARTS_KPT_IDS, BODY_PARTS_PAF_IDS
 
 
 class Pose(object):
-    num_kpts = 4
-    kpt_names = ['toplef', 'topright',
-                 'botright', 'botlef' ]
+    num_kpts = 1
+    kpt_names = ['nose', 'neck',
+                 'r_sho', 'r_elb', 'r_wri', 'l_sho', 'l_elb', 'l_wri',
+                 'r_hip', 'r_knee', 'r_ank', 'l_hip', 'l_knee', 'l_ank',
+                 'r_eye', 'l_eye',
+                 'r_ear', 'l_ear']
     sigmas = np.array([.26, .79, .79, .72, .62, .79, .72, .62, 1.07, .87, .89, 1.07, .87, .89, .25, .25, .35, .35],
                       dtype=np.float32) / 10.0
     vars = (sigmas * 2) ** 2
     last_id = -1
-    color = [0, 0, 255]
+    color = [0, 224, 255]
 
     def __init__(self, keypoints, confidence):
         super().__init__()

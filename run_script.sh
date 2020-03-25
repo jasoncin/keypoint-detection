@@ -1,0 +1,1 @@
+python train.py --experiment-name TestCheckpoint --train-images-folder data/train_256_4 --prepared-train-labels data/train_256_4/prepared_train_annotation.pkl --checkpoint-path weights/mobilenet_sgd_68.848.pth --epochs 110 --from-mobilenet

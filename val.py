@@ -82,8 +82,8 @@ def infer(net, img, scales, base_height, stride, pad_value=(0, 0, 0), img_mean=(
     normed_img = normalize(img, img_mean, img_scale)
     height, width, _ = normed_img.shape
     scales_ratios = [scale * base_height / float(height) for scale in scales]
-    avg_heatmaps = np.zeros((height, width, 5), dtype=np.float32)
-    avg_pafs = np.zeros((height, width, 8), dtype=np.float32)
+    avg_heatmaps = np.zeros((height, width, 19), dtype=np.float32)
+    avg_pafs = np.zeros((height, width, 38), dtype=np.float32)
 
     for ratio in scales_ratios:
         scaled_img = cv2.resize(normed_img, (0, 0), fx=ratio, fy=ratio, interpolation=cv2.INTER_CUBIC)
